@@ -12,6 +12,7 @@ import {
 
 export default function Home() {
     const [tickets, setTickets] = useState < string[][] > ([]);
+    const [results, setResults] = useState < any[] > ([]);
 
     async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
@@ -28,7 +29,8 @@ export default function Home() {
         body: JSON.stringify(tickets)
     })
     const data = await response.json()
-    console.log('Classification result:', data)
+    console.log('Classification Result:', data)
+    setResults(data.results)
   }
   return (
     <main className="min-h-screen bg-slate-950 text-white flex flex-col">
@@ -48,6 +50,11 @@ export default function Home() {
                                     {header}
                                 </TableHead>
                             ))}
+                            {}
+                            <TableHead className="text-white">Category</TableHead>
+                            <TableHead className="text-white">Subcategory</TableHead>
+                            <TableHead className="text-white">Confidence</TableHead>
+                            <TableHead className="text-white">Reasoning</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -58,6 +65,10 @@ export default function Home() {
                                         {cell}
                                     </TableCell>
                                 ))}
+                                <TableCell className="text-white">{results[rowIndex]?.category || 'N/A'}</TableCell>
+                                <TableCell className="text-white">{results[rowIndex]?.subcategory || 'N/A'}</TableCell>
+                                <TableCell className="text-white">{results[rowIndex]?.confidence !== undefined ? results[rowIndex].confidence.toFixed(2) : 'N/A'}</TableCell>
+                                <TableCell className="text-white">{results[rowIndex]?.reasoning || 'N/A'}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
