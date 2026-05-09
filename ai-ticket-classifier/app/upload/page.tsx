@@ -20,6 +20,16 @@ export default function Home() {
     const rows = text.split('\n').map(row => row.split(','))
     setTickets(rows)
   }
+
+  async function handleClassify() {
+    const response = await fetch('/api/classify',{
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(tickets)
+    })
+    const data = await response.json()
+    console.log('Classification result:', data)
+  }
   return (
     <main className="min-h-screen bg-slate-950 text-white flex flex-col">
       <nav className="flex items-center justify-between p-4">
@@ -52,6 +62,10 @@ export default function Home() {
                         ))}
                     </TableBody>
                 </Table>
+            )}
+
+            {tickets.length > 0 && (
+                <button onClick={handleClassify} className="bg-white text-slate-950 px-6 py-3 rounded-md font-semibold">Classify</button>
             )}
         </div> 
     </main>
